@@ -1,11 +1,14 @@
 #ifndef __CONTROLLER_H
 #define __CONTROLLER_H 2016
 
+#ifndef Fl_Multiline_Input_H
+#define Fl_Multiline_Input_H
+
 #ifndef Fl_Return_Button_H
 #define Fl_Return_Button_H
 
-#ifndef Fl_Multiline_Input_H
-#define Fl_Multiline_Input_H
+#ifndef Fl_Radio_Button_H
+#define Fl_Radio_Button_H
  
 /*
     Robbie Robot Shop v1.0 beta, (c) 2016 by Professor George F. Rice.
@@ -50,33 +53,29 @@
 #include "FL/Fl.H"
 #include "FL/Fl_Window.H"
 #include "FL/Fl_Input.H"
-#include "FL/Fl_Button.H"
-
-
-
-
-
-
-
-
+#include "FL/Fl_Return_Button.H"   
+#include "Fl/Fl_Button.H"
 
 using namespace std;
 
-///////Makes the return button function work///////////////
-class FL_EXPORT Fl_Return_Button : public Fl_Button {
-protected:
-  void draw();
-public:
-  int handle(int);
-  Fl_Return_Button(int X, int Y, int W, int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
-};
 //////////Makes the multiline input work/////////////////
 class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
-   public:
+  public:
     Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0);
 }; 
-
+///return button///
+class FL_EXPORT Fl_Return_Button : public Fl_Button { 
+  protected:
+    void draw();
+  public:
+    int handle(int);
+    Fl_Return_Button(int X, int Y, int W, int H, const char *l=0);
+};
+///radio button////
+class FL_EXPORT Fl_Radio_Button : public Fl_Button {
+    public:
+      Fl_Radio_Button(int X,int Y,int W,int H,const char *L=0);
+};
 class Controller {
   public:
     Controller (Shop& p_shop) : shop{p_shop} { }
@@ -118,19 +117,21 @@ class Controller {
     void cli();
     int gui();
     void execute_cmd(int cmd);
+
     ////////GUI CODE/////////////////
-    static void quit_CB(Fl_Widget *, void *);
+    static void quit_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_form_CB(Fl_Widget *w, void *p);
+    static void create_robot_part_CB(Fl_Widget *w, void *p);
+    static void cancel_robot_part_CB(Fl_Widget *w, void *p);
+    static void buttonHeadPushed(Fl_Widget* w, void* p);
+    static void buttonTorsoPushed(Fl_Widget* w, void* p);
   
 
   private:
     Shop& shop; 
 };
 
-
-
-
-
 #endif
 #endif
 #endif
-
+#endif

@@ -37,8 +37,8 @@
 #include "FL/FL_Group.H"
 #include "FL/Fl_Menu_Bar.H"
 #include "FL/Fl_Menu_Item.H"
-#include "FL/Fl_Input.H"
 #include "FL/Fl_Button.H"
+#include "FL/Fl_Radio_Button.H"
 
 
 
@@ -180,7 +180,7 @@ int Controller::gui()
     //widgets
     Fl_Window *window = new Fl_Window(300,180, "Robbie Robot Shop");
     Fl_Menu_Bar *menubar = new Fl_Menu_Bar(0,0,640,30);
-
+    
 
 
     menubar->add("File/Quit", FL_CTRL+'q', quit_CB);
@@ -188,38 +188,117 @@ int Controller::gui()
     menubar->add("Create/Customer");
     menubar->add("Create/Sales Associate");
     menubar->add("Create/Robot Model");
-    menubar->add("Create/Robot Part");
+    menubar->add("Create/Robot Part", FL_CTRL+'c', show_robot_part_form_CB);
     menubar->add("View/Orders");
     menubar->add("View/People");
     menubar->add("View/Robot Model");
     menubar->add("View/Robot Part");
     menubar->add("Help/Manual");
-
     
-
-
-   
-   /* Fl_Menu_Item menuitems[] =
-    {
-        { "&File", 0, 0, 0, FL_SUBMENU},
-            {"salida"},
-    };*/
-    
-    //callbacks
-
-
-    //menubar->menu(menuitems);
-
-
-
     window->end();
     window->show();
     return Fl::run();
 }
 
-void Controller::quit_CB(Fl_Widget *, void *) 
+void Controller::quit_CB(Fl_Widget *w, void *p) 
 {
     exit(0);
+}
+
+void Controller::buttonHeadPushed(Fl_Widget* w, void* p)
+{
+    //printf("%s says:", (char*)p);
+    if (((Fl_Radio_Button*)w)->value())
+        printf("Head\n");
+}
+
+void Controller::buttonTorsoPushed(Fl_Widget* w, void* p)
+{
+    //printf("%s says:", (char*)p);
+    if (((Fl_Radio_Button*)w)->value())
+        printf("Torso\n");
+}
+
+
+
+void Controller::show_robot_part_form_CB(Fl_Widget *w, void *p) {
+    Fl_Window *robot_part_create = new Fl_Window(340, 430, "New Robot Part");
+
+    Fl_Input *rp_name = new Fl_Input(120, 10, 210, 25, "Name");
+    rp_name->align(FL_ALIGN_LEFT);
+
+    Fl_Input *rp_part_number = new Fl_Input(120, 40, 210, 25, "Part Number:");
+    rp_part_number->align(FL_ALIGN_LEFT);
+
+    Fl_Input *rp_type = new Fl_Input(120, 70, 210, 25, "Type:");
+    rp_type->align(FL_ALIGN_LEFT);
+
+
+    Fl_Radio_Button *radioButtonHead = new Fl_Radio_Button(120,100,210,25, "Head");
+    radioButtonHead->when(FL_WHEN_RELEASE);
+    radioButtonHead->callback(buttonHeadPushed);
+    Fl_Radio_Button *radioButtonTorso = new Fl_Radio_Button(120,130,210,25, "Torso");
+    radioButtonTorso->when(FL_WHEN_RELEASE);
+    radioButtonTorso->callback(buttonTorsoPushed);
+    Fl_Radio_Button *radioButtonArm = new Fl_Radio_Button(120,160,210,25, "Arm");
+    Fl_Radio_Button *radioButtonLocomotor= new Fl_Radio_Button(120,190,210,25, "Locomotor");
+    Fl_Radio_Button *radioButtonBattery = new Fl_Radio_Button(120,220,210,25, "Battery");
+
+
+    Fl_Input *rp_weight = new Fl_Input(120, 250, 210, 25, "Weight:");
+    rp_weight->align(FL_ALIGN_LEFT);
+
+    Fl_Input *rp_cost = new Fl_Input(120, 280, 210, 25, "Cost:");
+    rp_cost->align(FL_ALIGN_LEFT);
+
+    Fl_Input *rp_description = new Fl_Multiline_Input(120, 310, 210, 75, "Description:");
+    rp_description->align(FL_ALIGN_LEFT);
+
+    Fl_Button *rp_create_button = new Fl_Return_Button(145, 400, 120, 25, "Create");
+    rp_create_button->callback((Fl_Callback *)create_robot_part_CB, 0);
+
+    Fl_Button *rp_cancel_button = new Fl_Button(270, 400, 60, 25, "Cancel");
+    rp_cancel_button->callback((Fl_Callback *)cancel_robot_part_CB, 0);
+
+    robot_part_create->end();
+    robot_part_create->set_non_modal();
+    robot_part_create->show();
+}
+
+void Controller::create_robot_part_CB(Fl_Widget *w, void *p) {
+
+    ////Saving user input into variables
+    Fl_Input* i1 = (Fl_Input*) w->parent()->child(0);
+    Fl_Input* i2 = (Fl_Input*) w->parent()->child(1);
+    Fl_Input* i3 = (Fl_Input*) w->parent()->child(2);
+    Fl_Radio_Button* i4 = (Fl_Radio_Button*) w->parent()->child(3);
+    Fl_Radio_Button* i5 = (Fl_Radio_Button*) w->parent()->child(4);
+    Fl_Radio_Button* i6 = (Fl_Radio_Button*) w->parent()->child(5);
+    Fl_Radio_Button* i7 = (Fl_Radio_Button*) w->parent()->child(6);
+    Fl_Radio_Button* i8 = (Fl_Radio_Button*) w->parent()->child(7);
+    Fl_Input* i9 = (Fl_Input*) w->parent()->child(8);
+    Fl_Input* i10 = (Fl_Input*) w->parent()->child(9);
+    Fl_Input* i11 = (Fl_Input*) w->parent()->child(10);
+
+    
+ 
+    //Fl_Radio_Button* i4 = (Fl_Radio_Button*) w->parent()->child(3);
+
+
+    //printing out user input
+    cout << i1->value() << endl;
+    cout << i2->value() << endl;
+    cout << i3->value() << endl;
+    cout << i4->value() << endl;
+    cout << i9->value() << endl;
+    cout << i10->value() << endl;
+    cout << i11->value() << endl;
+
+    w->parent()->hide();
+}
+
+void Controller::cancel_robot_part_CB(Fl_Widget *w, void *p) {
+    w->parent()->hide();
 }
 
 ////////////////////////////////////////////////////////////////ORIGINAL CODE//////////////////////////////////////////////////////////////////
