@@ -53,20 +53,15 @@ class Shop {
         //
         // Robot parts management
         //
-        void create_arm(string name, string part_number, double weight,
-                   double cost, int max_power_consumed, string description);
+        void create_arm(string name, string part_number, double weight, double cost, int max_power_consumed, string description);
         vector<Arm> arms() const; 
-        void create_battery(string name, string part_number, double weight,
-                   double cost, int max_energy_stored, string description);
+        void create_battery(string name, string part_number, double weight,double cost, int max_energy_stored, string description);
         vector<Battery> batteries() const;
-        void create_head(string name, string part_number, double weight,
-                   double cost, string description);
+        void create_head(string name, string part_number, double weight,double cost, string description);
         vector<Head> heads() const;
-        void create_locomotor(string name, string part_number, double weight,
-                   double cost, int max_power_consumed, int max_speed_possible, string description);
+        void create_locomotor(string name, string part_number, double weight, double cost, int max_power_consumed, int max_speed_possible, string description);
         vector<Locomotor> locomotors() const;
-        void create_torso(string name, string part_number, double weight,
-                   double cost, int max_battery_slots, string description);
+        void create_torso(string name, string part_number, double weight, double cost, int max_battery_slots, string description);
         vector<Torso> torsos() const;
 
         //

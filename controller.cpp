@@ -32,18 +32,26 @@
 #include <iostream>
 #include <string>
 #include <climits>
+#include "stdlib.h"
 #include "FL/Fl.H"
 #include "FL/Fl_Window.H"
+#include "shop.h"
 #include "FL/FL_Group.H"
 #include "FL/Fl_Menu_Bar.H"
 #include "FL/Fl_Menu_Item.H"
 #include "FL/Fl_Button.H"
 #include "FL/Fl_Radio_Button.H"
+#include "FL/Fl_Text_Display.H"
 
 
 
 using namespace std;
+Shop Controller::shop{"Robbie Robot Shop"};
 
+Controller::Controller()
+{
+
+}
 
 void Controller::main_menu() {
   cout << endl;
@@ -188,7 +196,7 @@ int Controller::gui()
     menubar->add("Create/Customer");
     menubar->add("Create/Sales Associate");
     menubar->add("Create/Robot Model");
-    menubar->add("Create/Robot Part", FL_CTRL+'c', show_robot_part_form_CB);
+    menubar->add("Create/Robot Part", FL_CTRL+'c', show_robot_part_type_CB);
     menubar->add("View/Orders");
     menubar->add("View/People");
     menubar->add("View/Robot Model");
@@ -205,45 +213,72 @@ void Controller::quit_CB(Fl_Widget *w, void *p)
     exit(0);
 }
 
-void Controller::buttonHeadPushed(Fl_Widget* w, void* p)
-{
-    //printf("%s says:", (char*)p);
-    if (((Fl_Radio_Button*)w)->value())
-        printf("Head\n");
+
+
+
+void Controller::show_robot_part_type_CB(Fl_Widget *w, void *p) {
+    Fl_Window *robot_part_type_create = new Fl_Window(340, 430, "New Robot Part");
+
+    Fl_Input *rp_part_type = new Fl_Input(120, 90, 210, 25, "Part Type:");
+    rp_part_type->align(FL_ALIGN_LEFT);
+
+    Fl_Button *rp_create_button = new Fl_Return_Button(145, 400, 120, 25, "Select");
+    rp_create_button->callback((Fl_Callback *) create_robot_part_CB, 0);
+
+    Fl_Button *rp_cancel_button = new Fl_Button(270, 400, 60, 25, "Cancel");
+    rp_cancel_button->callback((Fl_Callback *)cancel_robot_part_CB, 0);
+
+
+    robot_part_type_create->end();
+    robot_part_type_create->set_non_modal();
+    robot_part_type_create->show();
+
 }
 
-void Controller::buttonTorsoPushed(Fl_Widget* w, void* p)
-{
-    //printf("%s says:", (char*)p);
-    if (((Fl_Radio_Button*)w)->value())
-        printf("Torso\n");
+void Controller::create_final_robot_part_CB(Fl_Widget *w, void *p) {
+    w->parent()->hide();
+     Fl_Input* robotPartName = (Fl_Input*) w->parent()->child(0);
+    Fl_Input* robotPartNumber = (Fl_Input*) w->parent()->child(1);
+    Fl_Input* robotPartWeight = (Fl_Input*) w->parent()->child(2);
+    Fl_Input* robotPartCost = (Fl_Input*) w->parent()->child(3);
+    Fl_Input* robotPartDescription = (Fl_Input*) w->parent()->child(4);
+
+   /* // turns weight and cost into type double
+    string tempString = robotPartWeight->value();
+    double partWeight = std::stod(tempString);
+
+    tempString = robotPartCost->value();
+    double partPrice = std::stod(tempString);*/
+
+    //printing out user input
+    cout << robotPartName->value() << endl;
+    cout << robotPartNumber->value() << endl;
+    cout << robotPartWeight->value() << endl;
+    cout << robotPartCost->value() << endl;
+    cout << robotPartDescription->value() << endl;
+
+
+
+
+/*
+
+    cout << "Heads" << endl;
+    cout << "-----" << endl;
+    for (Head h: shop.heads()) cout << h << endl;
+    cout << endl;
+
+*/
 }
-
-
 
 void Controller::show_robot_part_form_CB(Fl_Widget *w, void *p) {
+
     Fl_Window *robot_part_create = new Fl_Window(340, 430, "New Robot Part");
 
     Fl_Input *rp_name = new Fl_Input(120, 10, 210, 25, "Name");
     rp_name->align(FL_ALIGN_LEFT);
 
-    Fl_Input *rp_part_number = new Fl_Input(120, 40, 210, 25, "Part Number:");
+    Fl_Input *rp_part_number = new Fl_Input(120, 50, 210, 25, "Part Number:");
     rp_part_number->align(FL_ALIGN_LEFT);
-
-    Fl_Input *rp_type = new Fl_Input(120, 70, 210, 25, "Type:");
-    rp_type->align(FL_ALIGN_LEFT);
-
-
-    Fl_Radio_Button *radioButtonHead = new Fl_Radio_Button(120,100,210,25, "Head");
-    radioButtonHead->when(FL_WHEN_RELEASE);
-    radioButtonHead->callback(buttonHeadPushed);
-    Fl_Radio_Button *radioButtonTorso = new Fl_Radio_Button(120,130,210,25, "Torso");
-    radioButtonTorso->when(FL_WHEN_RELEASE);
-    radioButtonTorso->callback(buttonTorsoPushed);
-    Fl_Radio_Button *radioButtonArm = new Fl_Radio_Button(120,160,210,25, "Arm");
-    Fl_Radio_Button *radioButtonLocomotor= new Fl_Radio_Button(120,190,210,25, "Locomotor");
-    Fl_Radio_Button *radioButtonBattery = new Fl_Radio_Button(120,220,210,25, "Battery");
-
 
     Fl_Input *rp_weight = new Fl_Input(120, 250, 210, 25, "Weight:");
     rp_weight->align(FL_ALIGN_LEFT);
@@ -255,48 +290,44 @@ void Controller::show_robot_part_form_CB(Fl_Widget *w, void *p) {
     rp_description->align(FL_ALIGN_LEFT);
 
     Fl_Button *rp_create_button = new Fl_Return_Button(145, 400, 120, 25, "Create");
-    rp_create_button->callback((Fl_Callback *)create_robot_part_CB, 0);
+    rp_create_button->callback((Fl_Callback *)create_final_robot_part_CB, 0);
 
     Fl_Button *rp_cancel_button = new Fl_Button(270, 400, 60, 25, "Cancel");
     rp_cancel_button->callback((Fl_Callback *)cancel_robot_part_CB, 0);
+
 
     robot_part_create->end();
     robot_part_create->set_non_modal();
     robot_part_create->show();
 }
-
 void Controller::create_robot_part_CB(Fl_Widget *w, void *p) {
 
-    ////Saving user input into variables
-    Fl_Input* i1 = (Fl_Input*) w->parent()->child(0);
-    Fl_Input* i2 = (Fl_Input*) w->parent()->child(1);
-    Fl_Input* i3 = (Fl_Input*) w->parent()->child(2);
-    Fl_Radio_Button* i4 = (Fl_Radio_Button*) w->parent()->child(3);
-    Fl_Radio_Button* i5 = (Fl_Radio_Button*) w->parent()->child(4);
-    Fl_Radio_Button* i6 = (Fl_Radio_Button*) w->parent()->child(5);
-    Fl_Radio_Button* i7 = (Fl_Radio_Button*) w->parent()->child(6);
-    Fl_Radio_Button* i8 = (Fl_Radio_Button*) w->parent()->child(7);
-    Fl_Input* i9 = (Fl_Input*) w->parent()->child(8);
-    Fl_Input* i10 = (Fl_Input*) w->parent()->child(9);
-    Fl_Input* i11 = (Fl_Input*) w->parent()->child(10);
+    Fl_Input* robotPartType = (Fl_Input*) w->parent()->child(0);
+    cout << robotPartType->value() << "helllo" << endl;
+    string robotType = robotPartType->value();
 
-    
- 
-    //Fl_Radio_Button* i4 = (Fl_Radio_Button*) w->parent()->child(3);
+    if(robotType.compare("head") == 0 || robotType.compare("HEAD") == 0)
+    {
+        robotPartType->callback((Fl_Callback *) show_robot_part_form_CB, 0); 
+    }
+}
 
 
-    //printing out user input
-    cout << i1->value() << endl;
-    cout << i2->value() << endl;
-    cout << i3->value() << endl;
-    cout << i4->value() << endl;
-    cout << i9->value() << endl;
-    cout << i10->value() << endl;
-    cout << i11->value() << endl;
+/*void Controller::create_robot_part_CB(Fl_Widget *w, void *p) {
+
+
+    Fl_Input* robotPartType = (Fl_Input*) w->parent()->child(0);
+    cout << robotPartType->value() << "helllo" << endl;
+    string robotType = robotPartType->value();
+
+    if(robotType.compare("head") == 0 || robotType.compare("HEAD") == 0)
+    {
+        robotPartType->callback((Fl_Callback *) show_robot_part_form_CB, 0); 
+    }
 
     w->parent()->hide();
 }
-
+*/
 void Controller::cancel_robot_part_CB(Fl_Widget *w, void *p) {
     w->parent()->hide();
 }
