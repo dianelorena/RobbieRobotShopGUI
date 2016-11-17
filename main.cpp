@@ -29,13 +29,12 @@
 */
 
 #include "controller.h"
-#include "shop.h"
 
 int main(int argc, char **argv) 
 {
 
- Shop shop{"Robbie Robot Shop"};
- Controller controller(shop);
+ //Shop shop{"Robbie Robot Shop"};
+ Controller controller;
  return controller.gui();
 }
 
