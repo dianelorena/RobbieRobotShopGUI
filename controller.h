@@ -78,7 +78,7 @@ class FL_EXPORT Fl_Radio_Button : public Fl_Button {
 };
 class Controller {
   public:
-    Controller (Shop& p_shop) : shop{p_shop} { }
+    Controller();
 
     const static int MENU_LIST_ORDERS      =  1;
     const static int MENU_CREATE_ORDER     =  2;
@@ -120,15 +120,30 @@ class Controller {
 
     ////////GUI CODE/////////////////
     static void quit_CB(Fl_Widget *w, void *p);
-    static void show_robot_part_form_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_type_CB(Fl_Widget *w, void *p);
+    static void define_robot_part(Fl_Widget *w, void *p);
+
+
+    static void show_robot_part_form_head_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_form_torso_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_form_locomotor_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_form_battery_CB(Fl_Widget *w, void *p);
+    static void show_robot_part_form_arm_CB(Fl_Widget *w, void *p);
+
+    static void create_final_robot_part_head_CB(Fl_Widget *w, void *p);
+    static void create_final_robot_part_torso_CB(Fl_Widget *w, void *p);
+    static void create_final_robot_part_locomotor_CB(Fl_Widget *w, void *p);
+    static void create_final_robot_part_battery_CB(Fl_Widget *w, void *p);
+    static void create_final_robot_part_arm_CB(Fl_Widget *w, void *p);
+
     static void create_robot_part_CB(Fl_Widget *w, void *p);
     static void cancel_robot_part_CB(Fl_Widget *w, void *p);
     static void buttonHeadPushed(Fl_Widget* w, void* p);
     static void buttonTorsoPushed(Fl_Widget* w, void* p);
-  
 
   private:
-    Shop& shop; 
+    static Shop shop; 
+    
 };
 
 #endif
